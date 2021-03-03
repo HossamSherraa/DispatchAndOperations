@@ -193,8 +193,8 @@ class ViewController: UIViewController {
         
         
         
-        
-        example(of: "Example For DispatchGroup") {
+//
+//        example(of: "Example For DispatchGroup") {
             
             
             /*Used to add tasks to this group and get notified after the group did excutes all its tasks ,
@@ -245,13 +245,14 @@ class ViewController: UIViewController {
 //            }
 //            group.wait()
 //            print("After Finish BEO MA")
-        }
+//        }
         
         
         
         /*
          it works like groups , but instead , you make a normal tasks , after that on start of each task call wait() , after it finishes call signal()
          the value in Semaphone is the linit tasks that run concurrenlty
+         https://medium.com/@roykronenfeld/semaphores-in-swift-e296ea80f860
          
          */
         let semaphore = DispatchSemaphore(value: 2)
