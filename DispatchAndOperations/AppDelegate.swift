@@ -17,7 +17,7 @@ var window: UIWindow?
     
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = ViewController()
+        window?.rootViewController = OperationViewController()
         return true
     }
 

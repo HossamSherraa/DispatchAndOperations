@@ -24,6 +24,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .red
+        
+        willChangeValue(forKey: "x")
+        
 //        example(of: "ASYNC + SERIALIZED_Q") {
 //            /*
 //             all ASYNC Closures will return immediatly
@@ -319,6 +322,14 @@ class ViewController: UIViewController {
     }
 
     
+    var x : String = "0" {
+        willSet{
+            print("New Value")
+        }
+        didSet {
+            print("OldValue")
+        }
+    }
 
 
 
