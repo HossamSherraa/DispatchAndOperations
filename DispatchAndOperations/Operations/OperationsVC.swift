@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 class OperationViewController : UIViewController , UITableViewDataSource , UITableViewDelegate {
-    var images : [UIImage?] = []
+    var images : [UIImage?] = .init(repeating: nil, count: 100)
     let que = OperationQueue()
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         images.count
@@ -27,8 +27,8 @@ class OperationViewController : UIViewController , UITableViewDataSource , UITab
     
    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == max(images.count - 1 , 0){
-            loadLast(maxLength: 25)
+        if indexPath.row == max(images.count - 5 , 0){
+//            loadLast(maxLength: 25)
         }
     }
     
@@ -45,7 +45,7 @@ class OperationViewController : UIViewController , UITableViewDataSource , UITab
         tableView.delegate = self
         
         tableView.rowHeight = 240
-        que.qualityOfService = .background
+        
         
         tableView.showsVerticalScrollIndicator = false
         loadLast(maxLength: 20)
@@ -65,25 +65,12 @@ class OperationViewController : UIViewController , UITableViewDataSource , UITab
      */
     func loadLast(maxLength : Int){
         
-        (0...maxLength).forEach{ index in
-            
-            let imageOperation = ImageDownloadOperation(imageUrl: "https://picsum.photos/100/100")
-            
-            imageOperation.completionBlock = {
-             
-               
-                DispatchQueue.main.async {
-                    let newIndex = self.images.count
-                    
-                    let indexPath = IndexPath(item: newIndex, section: 0)
-                    self.images.append(imageOperation.downloadedImage)
-                    self.tableView.insertRows(at: [indexPath], with: .none)
-                    
-                   
-                    
-                    
-                }
-            }
+        images.enumerated().forEach{ value in
+            let imageOperation = ImageDownloadOperation(imageUrl: "https://picsum.photos/100/100", indexPath: .init(item: value.offset, section: 0), completion: { image,indexPath  in
+                self.images[indexPath.row] = image
+                self.tableView.reloadRows(at: [indexPath], with: .none)
+                print(indexPath, "TTT")
+            })
             
             que.addOperation(imageOperation)
         }

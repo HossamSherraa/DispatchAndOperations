@@ -8,13 +8,16 @@
 import Foundation
 import UIKit
 class ImageDownloadOperation : AsyncOperation {
-    var downloadedImage : UIImage?
+    let indexPath : IndexPath
     let imageUrl : String
+    let completion : (UIImage? , IndexPath)->Void
     var task : URLSessionTask?
-    init(imageUrl : String) {
+    init(imageUrl : String , indexPath : IndexPath, completion : @escaping (UIImage? , IndexPath)->Void) {
         self.imageUrl = imageUrl
+        self.indexPath = indexPath
+        self.completion = completion
         super.init()
-        qualityOfService = .background
+        
     }
     
     
@@ -26,8 +29,15 @@ class ImageDownloadOperation : AsyncOperation {
         if let url = URL(string: imageUrl) {
             state = .executing
             task = URLSession.shared.dataTask(with: url , completionHandler:{ [weak self ]   data , response , error  in
+                if let error = error {
+                    print(error , "eee")
+                }
                 if let data = data {
-                    self?.downloadedImage = UIImage(data: data)
+                    let downloadedImage  = UIImage(data: data)
+                    DispatchQueue.main.sync {
+                        self?.completion(downloadedImage, self!.indexPath)
+                        
+                    }
                     self?.state = .finished
                 }
             })
